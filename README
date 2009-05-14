@@ -13,11 +13,13 @@ h2. Installing
 
 # Check that videostream folder is on your python path
 # Next, add the videostream app to your django INSTALLED_APPS
+@'videostream',@
 # If you want to use the default templates, you can add them to your TEMPLATE_DIRS
+@'django/videostream/path/templates/'@
 # Add the required extra settings
-# Add the urls to your project
-# About the encode.py script
-# Copy and modify the templates
+See the settings below.
+# Add the urls to your project into your project urls.py
+@( r'^videos/', include( 'videostream.urls' ) ),@
 
 h2. Required django settings with examples
 
