@@ -1,0 +1,12 @@
+django-video documentation
+================================
+
+Required django settings with examples
+--------------------------------------
+VIDEOSTREAM_SIZE = "320x240"
+VIDEOSTREAM_THUMBNAIL_SIZE = "320x240"
+VIDEOSTREAM_PLAYER = "url/to/the/flash/player.swf"
+
+VIDEOSTREAM_FEED_TITLE = "RSS Feed Title"
+VIDEOSTREAM_FEED_DESCRIPTION = "Description for the video feed"
+VIDEOSTREAM_FEED_LINK = "/location/of/the/feed/"

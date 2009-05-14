@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Videos published in, {{ month|date:"M Y" }}</h1>
+<p class="byline">A list of videos published in, {{ month|date:"M Y" }}.</p>
+
+{% if object_list %}
+<ul class="Listing">
+    {% for video in object_list %}
+    <li class="{% cycle 'odd' 'even' %}">
+        <a href="{{ video.get_absolute_url }}"><img class="fright" src="{{ video.thumbnail.url }}" /></a>
+        <h2><a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
+            <small class="byline">{{ video.author.first_name }} &nbsp;-&nbsp; {{ video.pub_date|date:"d M Y" }}</small></h2>
+        <p>{{ video.description }}</p>
+        <p><a href="{{ video.get_absolute_url }}">View now...</a></p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Sorry, but there are no blogs published for the year, {{ year }}.</p>
+{% endif %}
+
+{% endblock %}

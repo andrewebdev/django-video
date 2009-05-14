@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<script type="text/javascript" src="/player/script/path/here.js"></script>
+{% endblock %}
+
+{% block content %}
+{% if object %}
+    <h1>{{ object.title }}</h1>
+    <p class="byline">by {{ object.author.first_name }} - {{ object.pub_date|date:"d M Y" }}</p>
+    <p>{{ object.description }}</p>
+    <a href="{{ object.flvfile.url }}"
+        style="display: block; {{ object.get_player_size }}"
+       id="player"> </a>
+       <script>flowplayer("player", "player/path/here.swf");</script>
+{% else %}
+    <h2>Clip not found</h2>
+    <p>Sorry, but the clip you are looking for does not seem to exist</p>
+{% endif %}
+{% endblock %}
