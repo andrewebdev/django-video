@@ -1,11 +1,29 @@
-django-video documentation
-================================
+django-video Documentation
+==========================
+
+LICENSE
+-------
+Please see the LICENCE file for information on the License
+
+Requirements
+------------
+- The full version of FFMPEG if you want to do encoding yourself, but django-video does allow you to upload a flv file directly. Some operating systems, like Ubuntu, does not have the full version of FFMPEG installed, so make sure to install the full version.
+- django-taggins is also optional if you want to use it's tagging features.
+
+Installing
+----------
+- Check that videostream folder is on your python path
+- Next, add the videostream app to your django INSTALLED_APPS
+- If you want to use the default templates, you can add them to your TEMPLATE_DIRS
+- Add the required extra settings
+- Add the urls to your project
+- About the encode.py script
+- Copy and modify the templates
 
 Required django settings with examples
 --------------------------------------
 VIDEOSTREAM_SIZE = "320x240"
 VIDEOSTREAM_THUMBNAIL_SIZE = "320x240"
-VIDEOSTREAM_PLAYER = "url/to/the/flash/player.swf"
 
 VIDEOSTREAM_FEED_TITLE = "RSS Feed Title"
 VIDEOSTREAM_FEED_DESCRIPTION = "Description for the video feed"
