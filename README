@@ -1,8 +1,14 @@
 h1. django-video Documentation
 
+© Copyright 2009 Andre Engelbrecht. All Rights Reserved.
+
 h2. LICENSE
 
 Please see the LICENCE file for information on the License
+
+h2. django-video Use Cases
+
+Before you decide to use django-video on any commercial project, please be aware that this application only does some cms management and conversion into flv, and is perfect to personal sites, small company sites that want to incorporate video etc. Note however that if you want to build a large community driven site, of which video will be a big part, you will have to do a little more research into commercial, high volume streaming media. You may have to modify this app to hook into those solutions.
 
 h2. Requirements
 
