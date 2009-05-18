@@ -12,7 +12,7 @@ Before you decide to use django-video on any commercial project, please be aware
 
 h2. Requirements
 
-* The full version of FFMPEG if you want to use the encode.py script to do your own encoding, but django-video does allow you to upload a flv file directly. Note that, some operating systems, like Ubuntu, by default does not have the full version of FFMPEG installed, so make sure to install the full version.
+* The full version of FFMPEG, if you want to use @python manage.py encode@, to encode a video clip from avi, mov or ogv to flv. Note that, some operating systems, like Ubuntu, by default does not have the full version of FFMPEG installed, so make sure to install the full version.
 * django-tagging is also optional if you want to use it's tagging features.
 
 h2. Installing
