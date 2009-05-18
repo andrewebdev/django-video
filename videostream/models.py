@@ -50,11 +50,12 @@ class VideoStream(models.Model):
             help_text="If you already have an encoded flash video, upload it here (no encoding needed).")
 
     thumbnail = models.ImageField( blank=True, null=True, 
-            upload_to="videos/thumbnails/")
+            upload_to="videos/thumbnails/",
+            help_text="If you uploaded a flv clip that was already encoded, you will need to upload a thumbnail as well. If you are planning use django-video to encode, you dont have to upload a thumbnail, as django-video will create it for you")
 
-    # This option allows us to specify whether we need to encode the clip (via the external encode.py script)
+    # This option allows us to specify whether we need to encode the clip (manage.py encode)
     encode = models.BooleanField( default=False,
-            help_text="Encode or Re-Encode the clip. If you only wanted to change some information on the item, and do not want to encode the clip again, make sure this option is not selected. If this is the first time you are uploading the clip, make sure that you select the encode option now." )
+            help_text="Encode or Re-Encode the clip. If you only wanted to change some information on the item, and do not want to encode the clip again, make sure this option is not selected." )
 
     def __unicode__(self):
         return "%s" % self.title
@@ -69,6 +70,7 @@ class VideoStream(models.Model):
                 })
 
     def get_player_size(self):
-        """ this method returns the styles for the player size """
-        size = settings.VIDEOSTREAM_SIZE.split('x')
+        """ this method returns the styles for the player size
+        """
+        size = getattr(settings, 'VIDEOSTREAM_SIZE', '320x240').split('x')
         return "width: %spx; height: %spx;" % (size[0], size[1])
