@@ -22,19 +22,19 @@ h2. Installing
 @'videostream',@
 # If you want to use the default templates, you can add them to your TEMPLATE_DIRS
 @'django/videostream/path/templates/'@
-# Add the required extra settings
+# Override the default settings if you want to.
 See the settings below.
 # Add the urls to your project into your project urls.py
 @( r'^videos/', include( 'videostream.urls' ) ),@
 
-h2. Required django settings with examples
+h2. Settings you may want to override.
 
 @VIDEOSTREAM_SIZE = "320x240"@
 
 @VIDEOSTREAM_THUMBNAIL_SIZE = "320x240"@
 
-@VIDEOSTREAM_FEED_TITLE = "RSS Feed Title"@
+@VIDEOSTREAM_FEED_TITLE = "Video Feeds"@
 
-@VIDEOSTREAM_FEED_DESCRIPTION = "Description for the video feed"@
+@VIDEOSTREAM_FEED_DESCRIPTION = "Video Feeds"@
 
-@VIDEOSTREAM_FEED_LINK = "/location/of/the/feed/"@
+@VIDEOSTREAM_FEED_LINK = ""@
