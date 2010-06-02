@@ -6,12 +6,10 @@
 # If this script is distributed, it must be accompanied by the Licence
 
 from django.contrib import admin
-from videostream.models import VideoStream
+from videostream.models import *
 
-class VideoStreamAdmin(admin.ModelAdmin):
-    prepopulated_fields = {
-            'slug': ('title',),
-            } 
+class VideoAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)} 
     fieldsets = [
             ('General', {'fields': ['title', 'slug', 'description']}),
             ('Publication', {'fields': ['pub_date', 'tags', 'is_public', 'featured', 'enable_comments']}),
@@ -23,4 +21,4 @@ class VideoStreamAdmin(admin.ModelAdmin):
     list_filter = ['pub_date', 'is_public', 'featured','enable_comments',  'encode']
     search_fields = ['title', 'description', 'tags']
 
-admin.site.register(VideoStream, VideoStreamAdmin)
+admin.site.register(Video, VideoAdmin)
