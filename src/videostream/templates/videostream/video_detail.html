@@ -12,12 +12,27 @@ Example script for using flowplayer
     <p class="byline">by {{ object.author.first_name }} - {{ object.pub_date|date:"d M Y" }}</p>
     <p>{{ object.description }}</p>
     {% comment %}
-    Example code using flowplayer
+    Example code using flowplayer to play a Flash File 
 
     <a href="{{ object.flvfile.url }}"
         style="display: block; {{ object.get_player_size }}"
        id="player"> </a>
-   {% endcomment %}
+
+    {% endcomment %}
+
+    {% comment %}
+    Example code using django-oembed (http://code.google.com/p/django-oembed/)
+
+       {% oembed %}{{ object.video_url }}{% endoembed %}
+
+    {% endcomment %}
+
+    {% comment %}
+    Example code using the video_code field from the EmbedVideo model.
+
+        {{ object.video_code }}
+
+    {% endcomment %}
 {% else %}
     <h2>Clip not found</h2>
     <p>Sorry, but the clip you are looking for does not seem to exist</p>
