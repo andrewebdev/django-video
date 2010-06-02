@@ -76,9 +76,9 @@ class Video(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('videostream_video_detail', (), { 
-            'year': self.pub_date.strftime("%Y"),
-            'month': self.pub_date.strftime("%b").lower(),
-            'day': self.pub_date.strftime("%d"), 
+            'year': self.publish_date.strftime("%Y"),
+            'month': self.publish_date.strftime("%b").lower(),
+            'day': self.publish_date.strftime("%d"), 
             'slug': self.slug 
         })
 

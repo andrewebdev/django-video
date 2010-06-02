@@ -1,27 +1,23 @@
-{% extends 'base.html' %}
+{% extends 'videostream/base.html' %}
 
-{% block meta %}
-<!-- 
-
+{% comment %}
 Example script for using flowplayer
 
 <script type="text/javascript" src="/site_media/scripts/flowplayer-3.0.2.min.js"></script>
--->
-{% endblock %}
+{% endcomment %}
 
-{% block content %}
+{% block main_content %}
 {% if object %}
     <h1>{{ object.title }}</h1>
     <p class="byline">by {{ object.author.first_name }} - {{ object.pub_date|date:"d M Y" }}</p>
     <p>{{ object.description }}</p>
-    <!-- 
-    
+    {% comment %}
     Example code using flowplayer
 
     <a href="{{ object.flvfile.url }}"
         style="display: block; {{ object.get_player_size }}"
        id="player"> </a>
-   -->
+   {% endcomment %}
 {% else %}
     <h2>Clip not found</h2>
     <p>Sorry, but the clip you are looking for does not seem to exist</p>

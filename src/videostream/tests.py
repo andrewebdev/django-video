@@ -60,4 +60,5 @@ class VideoCategoryTestCase(BaseTestCase):
         )
 
     def testVideoURL(self):
-        pass
+        response = self.client.get(self.video1.get_absolute_url())
+        self.failUnlessEqual(response.status_code, 200)
