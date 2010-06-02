@@ -61,7 +61,7 @@ class Video(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
     publish_date = models.DateTimeField(null=True, blank=True)
     
-    def Meta:
+    class Meta:
         ordering = ('-publish_date', '-created_date')
         get_latest_by = 'publish_date'
 
