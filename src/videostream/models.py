@@ -26,6 +26,26 @@ except ImportError:
     tagfield_help_text = 'Django-tagging was not found, tags will be treated as plain text.'
 # End tagging snippet
 
+class VideoCategory(models.Model):
+    """ A model to help categorize videos """
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(
+        unique=True,
+        help_text="A url friendly slug for the category",
+    )
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Video Category"
+        verbose_name_plural = "Video Categories"
+
+    def __unicode__(self):
+        return "%s" % self.title
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videostream_category_detail', [self.slug])
+
 class VideoBase(models.Model):
     """
     This is our Base Video Class, with fields that will be available to all other
@@ -38,6 +58,7 @@ class VideoBase(models.Model):
         help_text="A url friendly slug for the video clip.",
     )
     tags = TagField(help_text=tagfield_help_text)
+    categories = models.ManyToManyField(VideoCategory)
     description = models.TextField(null=True, blank=True)
     is_public = models.BooleanField(default=False)
     allow_comments = models.BooleanField(default=False)
@@ -55,7 +76,7 @@ class VideoBase(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('videostream_detail', (), { 
+        return ('videostream_video_detail', (), { 
             'year': self.pub_date.strftime("%Y"),
             'month': self.pub_date.strftime("%b").lower(),
             'day': self.pub_date.strftime("%d"), 
@@ -68,6 +89,14 @@ class VideoBase(models.Model):
             self.publish_date = datetime.now()
         super(VideoBase, self).save(*args, **kwargs)
 
+class EmbedVideo(VideoBase):
+    video_url = models.URLField(null=True, blank=True)
+    video_code = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Use the video embed code instead of the url if your frontend does not support embedding with the URL only."
+    )
+
 class FlashVideo(VideoBase):
     """
     This model is what was once called "VideoStream". Since we want to support videos
@@ -76,8 +105,6 @@ class FlashVideo(VideoBase):
     """
     videoupload = models.FileField(
         upload_to="videos/source/",
-        null=True,
-        blank=True,
         help_text="Make sure that the video you are uploading has a audo bitrate of at least 16. The encoding wont function on a lower audio bitrate."
     )
 
