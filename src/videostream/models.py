@@ -46,7 +46,7 @@ class VideoCategory(models.Model):
     def get_absolute_url(self):
         return ('videostream_category_detail', [self.slug])
 
-class VideoBase(models.Model):
+class Video(models.Model):
     """
     This is our Base Video Class, with fields that will be available to all other
     Video models.
@@ -67,7 +67,6 @@ class VideoBase(models.Model):
     publish_date = models.DateTimeField(null=True, blank=True)
     
     class Meta:
-        abstract = True
         ordering = ('-publish_date',)
         get_latest_by = 'publish_date'
 
@@ -87,9 +86,9 @@ class VideoBase(models.Model):
         self.modified_date = datetime.now()
         if self.publish_date == None and self.is_public:
             self.publish_date = datetime.now()
-        super(VideoBase, self).save(*args, **kwargs)
+        super(Video, self).save(*args, **kwargs)
 
-class EmbedVideo(VideoBase):
+class EmbedVideo(Video):
     video_url = models.URLField(null=True, blank=True)
     video_code = models.TextField(
         null=True,
@@ -97,7 +96,7 @@ class EmbedVideo(VideoBase):
         help_text="Use the video embed code instead of the url if your frontend does not support embedding with the URL only."
     )
 
-class FlashVideo(VideoBase):
+class FlashVideo(Video):
     """
     This model is what was once called "VideoStream". Since we want to support videos
     from other sources as well, this model was renamed to FlashVideo.
@@ -105,6 +104,8 @@ class FlashVideo(VideoBase):
     """
     videoupload = models.FileField(
         upload_to="videos/source/",
+        null=True,
+        blank=True,
         help_text="Make sure that the video you are uploading has a audo bitrate of at least 16. The encoding wont function on a lower audio bitrate."
     )
 
