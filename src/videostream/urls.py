@@ -58,6 +58,12 @@ urlpatterns = patterns ('django.views.generic.date_based',
     ),
 )
 
+urlpatterns += patterns('django.views.generic.list_detail',
+    url(r'^id/(?P<object_id>[\d]+)/$', 'object_detail', {
+        'queryset': Video.objects.all(),
+    }, name="videostream_video_detail_id"),
+)
+
 # urlpatterns += patterns('django.contrib.syndication.views',
 #     (r'^feeds/(?P<url>.*)/$', 'feed', {'feed_dict': feeds}),
 # )
