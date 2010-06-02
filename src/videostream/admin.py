@@ -1,24 +1,72 @@
 # -*- coding: utf-8 -*-
 
-# © Copyright 2009 Andre Engelbrecht. All Rights Reserved.
-# This script is licensed under the BSD Open Source Licence
-# Please see the text file LICENCE for more information
-# If this script is distributed, it must be accompanied by the Licence
-
 from django.contrib import admin
 from videostream.models import *
 
-class VideoAdmin(admin.ModelAdmin):
+# class VideoAdmin(admin.ModelAdmin):
+#     prepopulated_fields = {'slug': ('title',)} 
+#     date_hierarchy = 'publish_date'
+#     list_display = [
+#         'title', 'slug', 'publish_date', 'is_public',
+#         'allow_comments',
+#     ]
+#     list_filter = [
+#         'created_date', 'publish_date', 'modified_date',
+#         'is_public', 'allow_comments',
+#     ]
+#     search_fields = ['title', 'description', 'tags']
+
+class VideoCategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+    list_display = ['title', 'slug']
+
+class FlashVideoAdmin(admin.ModelAdmin):
+    list_display = [
+        'title', 'slug', 'publish_date', 'is_public',
+        'allow_comments', 'encode',
+    ]
+    list_filter = [
+        'created_date', 'publish_date', 'modified_date',
+        'is_public', 'allow_comments', 'encode',
+    ]
     prepopulated_fields = {'slug': ('title',)} 
-    fieldsets = [
-            ('General', {'fields': ['title', 'slug', 'description']}),
-            ('Publication', {'fields': ['pub_date', 'tags', 'is_public', 'featured', 'enable_comments']}),
-            ('Video Files', {'fields': ['videoupload', 'flvfile', 'thumbnail']}),
-            ('Encoding Options', {'fields': ['encode']}),
-            ]
-    date_hierarchy = 'pub_date'
-    list_display = ['title', 'flvfile', 'pub_date', 'is_public', 'featured', 'enable_comments', 'encode']
-    list_filter = ['pub_date', 'is_public', 'featured','enable_comments',  'encode']
+    fieldsets = (
+        ('Video Details', {'fields': [
+            'title', 'slug', 'description', 'tags', 'is_public',
+            'allow_comments', 'publish_date', 'categories',
+        ]}),
+
+        ('Video Source', {'fields': [
+            'videoupload', 'flvfile', 'thumbnail', 'encode'
+        ]})
+    )
+    date_hierarchy = 'publish_date'
     search_fields = ['title', 'description', 'tags']
 
-admin.site.register(Video, VideoAdmin)
+class EmbedVideoAdmin(admin.ModelAdmin):
+    list_display = [
+        'title', 'slug', 'publish_date', 'is_public',
+        'allow_comments', 'video_url',
+    ]
+    list_filter = [
+        'created_date', 'publish_date', 'modified_date',
+        'is_public', 'allow_comments',
+    ]
+    prepopulated_fields = {'slug': ('title',)} 
+    fieldsets = (
+        ('Video Details', {'fields': [
+            'title', 'slug', 'description', 'tags', 'is_public',
+            'allow_comments', 'publish_date', 'categories',
+        ]}),
+
+        ('Video Source', {'fields': [
+            'video_url', 'video_code',
+        ]})
+    )
+    date_hierarchy = 'publish_date'
+    search_fields = ['title', 'description', 'tags']
+
+# admin.site.register(Video, VideoAdmin)
+admin.site.register(VideoCategory, VideoCategoryAdmin)
+admin.site.register(FlashVideo, FlashVideoAdmin)
+admin.site.register(EmbedVideo, EmbedVideoAdmin)
