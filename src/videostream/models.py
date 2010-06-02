@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# © Copyright 2009 Andre Engelbrecht. All Rights Reserved.
-# This script is licensed under the BSD Open Source Licence
-# Please see the text file LICENCE for more information
-# If this script is distributed, it must be accompanied by the Licence
-
 from django.db import models
 from django.conf import settings
 from datetime import datetime
@@ -66,8 +61,8 @@ class Video(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
     publish_date = models.DateTimeField(null=True, blank=True)
     
-    class Meta:
-        ordering = ('-publish_date',)
+    def Meta:
+        ordering = ('-publish_date', '-created_date')
         get_latest_by = 'publish_date'
 
     def __unicode__(self):
