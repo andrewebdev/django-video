@@ -96,19 +96,19 @@ class EmbedVideo(Video):
 
 class FlashVideo(Video):
     """
-    This model is what was once called "VideoStream". Since we want to support videos
-    from other sources as well, this model was renamed to FlashVideo.
+    This model is what was once called "VideoStream". Since we want to support
+    videos from other sources as well, this model was renamed to FlashVideo.
 
     """
     videoupload = models.FileField(
-        upload_to="videos/source/",
+        upload_to="videos/flash/source/",
         null=True,
         blank=True,
         help_text="Make sure that the video you are uploading has a audo bitrate of at least 16. The encoding wont function on a lower audio bitrate."
     )
 
     flvfile = models.FileField(
-        upload_to="videos/flv/",
+        upload_to="videos/flash/flv/",
         null=True,
         blank=True,
         help_text="If you already have an encoded flash video, upload it here (no encoding needed)."
@@ -117,7 +117,7 @@ class FlashVideo(Video):
     thumbnail = models.ImageField(
         blank=True,
         null=True, 
-        upload_to="videos/thumbnails/",
+        upload_to="videos/flash/thumbnails/",
         help_text="If you uploaded a flv clip that was already encoded, you will need to upload a thumbnail as well. If you are planning use django-video to encode, you dont have to upload a thumbnail, as django-video will create it for you"
     )
 
