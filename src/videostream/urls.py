@@ -49,7 +49,7 @@ urlpatterns = patterns ('django.views.generic.date_based',
     url(r'^(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', 
         'object_detail', 
         video_info_dict,
-        name='videostream_video_detail'
+        name='videostream_video_detail',
     ),
 )
 
