@@ -41,6 +41,10 @@ def unpublish_videos(modeladmin, request, queryset):
     queryset.update(is_public=False)
 unpublish_videos.short_description = "Unpublish selected Videos"
 
+## Inline Model Classes
+class HTML5VideoInline(admin.TabularInline):
+    model = HTML5Video
+
 ## ModelAdmin Classes
 class VideoCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
@@ -95,10 +99,8 @@ class EmbedVideoAdmin(VideoAdmin):
     )
 
 class BasicVideoAdmin(VideoAdmin):
-    list_display = VideoAdmin.list_display + ['video_file']
-    fieldsets = VideoAdmin.fieldsets + (
-        ('Video Source', {'fields': ['video_file']}),
-    )
+    list_display = VideoAdmin.list_display + ['video_type']
+    inlines = [HTML5VideoInline]
 
 admin.site.register(VideoCategory, VideoCategoryAdmin)
 admin.site.register(FlashVideo, FlashVideoAdmin)

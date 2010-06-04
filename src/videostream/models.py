@@ -87,10 +87,34 @@ class Video(models.Model):
         super(Video, self).save(*args, **kwargs)
 
 class BasicVideo(Video):
-    video_file = models.FileField(
-        upload_to="videos/basic/source/",
-        help_text="Make sure that the video is the correct format for your website."
+    def video_type(self):
+        return self.html5video.get_video_type_display()
+
+class HTML5Video(models.Model):
+    OGG = 0
+    WEBM = 1
+    MP4 = 2
+    FLASH = 3
+    VIDEO_TYPE = (
+        (OGG, 'video/ogg'),
+        (WEBM, 'video/webm'),
+        (MP4, 'vidoe/mp4'),
+        (FLASH, 'video/flv'),
     )
+
+    video_type = models.IntegerField(
+        choices=VIDEO_TYPE,
+        default=WEBM,
+        help_text="The Video type"
+    )
+    video_file = models.FileField(
+        upload_to="videos/html5/",
+        null=True,
+        blank=True,
+        help_text="The file you wish to upload. Make sure that it's the correct format.",
+    )
+    # Allow for multiple video types for a single video
+    basic_video = models.ForeignKey(BasicVideo)
 
 class EmbedVideo(Video):
     video_url = models.URLField(null=True, blank=True)
