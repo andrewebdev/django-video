@@ -1,0 +1,55 @@
+{% comment %}
+{% load oembed_tags %}
+{% endcomment %}
+
+{% if video_type == 'basicvideo' %}
+    <video width="320" height="240" controls="controls">
+        {% for video in video_instance.basicvideo.html5video_set.all %}
+        <source src="{{ video.video_file.url }}" type="{{ video.get_video_type_display }}">
+        {% endfor %}
+        Your browser does not support the Video Tag.
+    </video>
+{% endif %}
+
+{% if video_type == 'embedvideo' %}
+    {% comment %}
+
+    If we have the video_code, then we use that to embed the video.
+    If not then we will use django-oembed to display the video directly
+    from the url.
+
+    Note however that the load tag and django-oembed tags have been commented out
+    in case you dont have django-oembed installed.
+
+    To use them, make sure you have django-oembed installed. And then customize
+    this template in your project templates folder, removing the comments around
+    the tags.
+
+    {% endcomment %}
+
+    {% if video_instance.embedvideo.video_code %}
+        {{ video_instance.embedvideo.video_code|safe }}
+    {% else %}
+        {% comment %}
+        {% oembed %}{{ video_instance.embedvideo.video_url }}{% endoembed %}
+        {% endcomment %}
+    {% endif %}
+{% endif %}
+
+{% if video_type == 'flashvideo' %}
+    {% comment %}
+
+    To use the flashplayer option, you need to have a flashplayer installed
+    for your site. FlowPlayer is a good choice (http://flowplayer.org/).
+
+    If you have a flashplayer installed, you need to customize this template and
+    add the neccesarry HTML required for the flash player you chose.
+
+    Here is a example, using flowplayer:
+
+    <a href="{{ video_instance.flashvideo.flvfile.url }}"
+        style="display: block; width={{ width }}; height={{ height }};"
+        id="player"> </a>
+
+    {% endcomment %}
+{% endif %}

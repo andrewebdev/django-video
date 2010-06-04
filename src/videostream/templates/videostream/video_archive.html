@@ -1,6 +1,6 @@
 {% extends 'videostream/base.html' %}
 
-{% block content %}
+{% block main_content %}
 <h1>Video Archive</h1>
 <p class="byline">Video Archive</p>
 
@@ -8,7 +8,6 @@
 <ul class="Listing">
     {% for video in latest %}
     <li class="{% cycle 'odd' 'even' %}">
-        <a href="{{ video.get_absolute_url }}"><img class="fright" src="{{ video.thumbnail.url }}" /></a>
         <h2><a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
             <small class="byline">{{ video.author.first_name }} &nbsp;-&nbsp; {{ video.pub_date|date:"d M Y" }}</small></h2>
         <p>{{ video.description }}</p>
