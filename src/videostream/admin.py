@@ -42,82 +42,66 @@ def unpublish_videos(modeladmin, request, queryset):
 unpublish_videos.short_description = "Unpublish selected Videos"
 
 ## ModelAdmin Classes
-# We dont need the Video Model to have an Admin interface
-# but I'm leaving the code commented in here just in case we
-# want it sometime in the future.
-#
-# class VideoAdmin(admin.ModelAdmin):
-#     prepopulated_fields = {'slug': ('title',)} 
-#     date_hierarchy = 'publish_date'
-#     list_display = [
-#         'title', 'slug', 'publish_date', 'is_public',
-#         'allow_comments',
-#     ]
-#     list_filter = [
-#         'created_date', 'publish_date', 'modified_date',
-#         'is_public', 'allow_comments',
-#     ]
-#     search_fields = ['title', 'description', 'tags']
-
 class VideoCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ['title', 'slug']
 
-class FlashVideoAdmin(admin.ModelAdmin):
-    list_display = [
-        'title', 'slug', 'publish_date', 'is_public',
-        'allow_comments', 'encode',
-    ]
-    list_filter = [
-        'created_date', 'publish_date', 'modified_date',
-        'is_public', 'allow_comments', 'encode',
-    ]
+class VideoAdmin(admin.ModelAdmin):
+    """
+    Use this ModelAdmin class for other classes to extend
+
+    """
     prepopulated_fields = {'slug': ('title',)} 
-    fieldsets = (
-        ('Video Details', {'fields': [
-            'title', 'slug', 'description', 'tags', 'is_public',
-            'allow_comments', 'publish_date', 'categories',
-        ]}),
-
-        ('Video Source', {'fields': [
-            'videoupload', 'flvfile', 'thumbnail', 'encode'
-        ]})
-    )
     date_hierarchy = 'publish_date'
-    search_fields = ['title', 'description', 'tags']
-    actions = [
-        publish_videos, unpublish_videos,
-        mark_for_encoding, unmark_for_encoding,
-        enable_video_comments, disable_video_comments,
-        encode_videos,
-    ]
-
-class EmbedVideoAdmin(admin.ModelAdmin):
     list_display = [
         'title', 'slug', 'publish_date', 'is_public',
-        'allow_comments', 'video_url',
+        'allow_comments',
     ]
     list_filter = [
         'created_date', 'publish_date', 'modified_date',
         'is_public', 'allow_comments',
     ]
-    prepopulated_fields = {'slug': ('title',)} 
+    search_fields = ['title', 'description', 'tags']
     fieldsets = (
         ('Video Details', {'fields': [
             'title', 'slug', 'description', 'tags', 'is_public',
             'allow_comments', 'publish_date', 'categories',
         ]}),
-
-        ('Video Source', {'fields': [
-            'video_url', 'video_code',
-        ]})
     )
-    date_hierarchy = 'publish_date'
-    search_fields = ['title', 'description', 'tags']
-    actions = [publish_videos, unpublish_videos, enable_video_comments,
-               disable_video_comments]
+    actions = [publish_videos, unpublish_videos,
+               enable_video_comments, disable_video_comments]
 
-# admin.site.register(Video, VideoAdmin)
+class FlashVideoAdmin(VideoAdmin):
+    list_display = VideoAdmin.list_display + ['encode']
+    list_filter = VideoAdmin.list_filter + ['encode']
+    fieldsets = VideoAdmin.fieldsets + (
+        ('Video Source', {'fields': [
+            'videoupload',
+            'flvfile',
+            'thumbnail', 
+            'encode'
+        ]}),
+    )
+    actions = VideoAdmin.actions + [mark_for_encoding,
+                                    unmark_for_encoding, encode_videos]
+
+class EmbedVideoAdmin(VideoAdmin):
+    list_display = VideoAdmin.list_display + ['video_url']
+    fieldsets = VideoAdmin.fieldsets + (
+        ('Video Source', {'fields': [
+            'video_url',
+            'video_code',
+        ]}),
+    )
+
+class BasicVideoAdmin(VideoAdmin):
+    list_display = VideoAdmin.list_display + ['video_file']
+    fieldsets = VideoAdmin.fieldsets + (
+        ('Video Source', {'fields': ['video_file']}),
+    )
+
 admin.site.register(VideoCategory, VideoCategoryAdmin)
 admin.site.register(FlashVideo, FlashVideoAdmin)
 admin.site.register(EmbedVideo, EmbedVideoAdmin)
+admin.site.register(BasicVideo, BasicVideoAdmin)
+# admin.site.register(Video, VideoAdmin)

@@ -86,6 +86,12 @@ class Video(models.Model):
             self.publish_date = datetime.now()
         super(Video, self).save(*args, **kwargs)
 
+class BasicVideo(Video):
+    video_file = models.FileField(
+        upload_to="videos/basic/source/",
+        help_text="Make sure that the video is the correct format for your website."
+    )
+
 class EmbedVideo(Video):
     video_url = models.URLField(null=True, blank=True)
     video_code = models.TextField(
