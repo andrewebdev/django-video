@@ -34,6 +34,9 @@ disable_video_comments.short_description = "Disable comments on selected videos"
 def publish_videos(modeladmin, request, queryset):
     """ Mark selected videos as public """
     queryset.update(is_public=True)
+    # Quickly call the save() method for every video so that the dates are updated
+    for video in queryset:
+        video.save()
 publish_videos.short_description = "Publish selected videos"
 
 def unpublish_videos(modeladmin, request, queryset):
