@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 from django.db import models
 from django.conf import settings
-from datetime import datetime
+from django.contrib.auth.models import User
 
 # use Django-tagging for tags. If Django-tagging cannot be found, create our own
 # I did not author this little snippet, I found it somewhere on the web,
@@ -60,6 +62,7 @@ class Video(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     publish_date = models.DateTimeField(null=True, blank=True)
+    author = models.ForeignKey(User, null=True, blank=True)
     
     class Meta:
         ordering = ('-publish_date', '-created_date')
@@ -115,6 +118,10 @@ class HTML5Video(models.Model):
     )
     # Allow for multiple video types for a single video
     basic_video = models.ForeignKey(BasicVideo)
+
+    class Meta:
+        verbose_name = "Html 5 Video"
+        verbose_name_plural = "Html 5 Videos"
 
 class EmbedVideo(Video):
     video_url = models.URLField(null=True, blank=True)

@@ -59,7 +59,7 @@ class VideoAdmin(admin.ModelAdmin):
     date_hierarchy = 'publish_date'
     list_display = [
         'title', 'slug', 'publish_date', 'is_public',
-        'allow_comments',
+        'allow_comments', 'author',
     ]
     list_filter = [
         'created_date', 'publish_date', 'modified_date',
@@ -69,7 +69,7 @@ class VideoAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Video Details', {'fields': [
             'title', 'slug', 'description', 'tags', 'is_public',
-            'allow_comments', 'publish_date', 'categories',
+            'allow_comments', 'publish_date', 'categories', 'author',
         ]}),
     )
     actions = [publish_videos, unpublish_videos,
