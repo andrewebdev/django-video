@@ -37,5 +37,71 @@
             "categories": [1, 2],
             "author": 1
         }
+    },
+    {
+        "pk": 2,
+        "model": "videostream.video",
+        "fields": {
+            "title": "Video 2 (Basic Video)",
+            "slug": "video-2",
+            "description": "Video 2 Description",
+            "tags": "tag1 tag2",
+            "categories": [1],
+            "author": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "videostream.video",
+        "fields": {
+            "title": "Video 3 (Flash Video)",
+            "slug": "video-3",
+            "description": "Video 3 Description",
+            "tags": "tag1 tag2",
+            "categories": [2],
+            "author": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "videostream.basicvideo",
+        "fields": {}
+    },
+    {
+        "pk": 1,
+        "model": "videostream.html5video",
+        "fields": {
+            "video_type": 1,
+            "video_file": "temp.ogg",
+            "basic_video": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "videostream.html5video",
+        "fields": {
+            "video_type": 2,
+            "video_file": "temp.webm",
+            "basic_video": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "videostream.html5video",
+        "fields": {
+            "video_type": 3,
+            "video_file": "temp.mp4",
+            "basic_video": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "videostream.flashvideo",
+        "fields": {
+            "original_file": "original.mp4",
+            "flv_file": "video.flv",
+            "thumbnail": "video_thumb.png",
+            "encode": false
+        }
     }
 ]
