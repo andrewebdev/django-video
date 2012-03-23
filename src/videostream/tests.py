@@ -1,67 +1,75 @@
+from datetime import datetime
+
 from django.test import TestCase
-from videostream.models import *
+from django.test.client import Client
+from django.contrib.auth.models import User
 
-class BaseTestCase(TestCase):
-    def setUp(self):
-        self.category1 = VideoCategory.objects.create(
-            title="News",
-            slug="news",
+from videostream.models import VideoCategory, Video
+
+
+class VideoCategoryTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+    urls = 'videostream.urls'
+
+    def test_model_exists(self):
+        cat = VideoCategory.objects.create(
+            title='test', slug='test', description='test category')
+
+    def test_unicode(self):
+        self.assertEqual('Category 1',
+            VideoCategory.objects.get(id=1).__unicode__())
+
+    def test_verbose_name_plural(self):
+        self.assertEqual('Video Categories',
+            VideoCategory._meta.verbose_name_plural)
+
+    def test_categories_exist(self):
+        self.assertEquals(2, VideoCategory.objects.all().count())
+
+    def test_absolute_url(self):
+        self.assertEqual('/category/category-1/',
+            VideoCategory.objects.get(id=1).get_absolute_url())
+
+
+class VideoTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+    urls = 'videostream.urls'
+
+    def test_model_exists(self):
+        v = Video.objects.create(
+            title='test video 1',
+            slug='test-video-1',
+            description='test video description',
+            tags='tag1 tag2',
+            author=User.objects.get(id=1),  # Use our default user
         )
 
-        self.video1 = EmbedVideo.objects.create(
-            title="Test Video",
-            slug="test-video",
-            tags="test video",
-            description="A simple test video",
-            is_public=True,
-            allow_comments=True,
-            video_url="http://videourl/",
-            video_code="<embed>test</embed>",
-        )
-        self.video1.categories.add(self.category1)
+    def test_unicode(self):
+        self.assertEqual('Video 1', Video.objects.get(id=1).__unicode__())
 
-        self.video2 = FlashVideo.objects.create(
-            title="Flash Video Test",
-            slug="flash-video-test",
-            tags="flash test video",
-            description="A simple flash video test",
-            is_public = False,
-            allow_comments = True,
-        )
-        self.video2.categories.add(self.category1)
+    def test_visible_video_has_publish_date(self):
+        v = Video.objects.get(id=1)
+        self.assertIsNone(v.publish_date)
 
-class VideoCategoryTestCase(BaseTestCase):
-    def testCategories(self):
-        self.assertEquals(VideoCategory.objects.all().count(), 1)
+        v.is_public = True
+        v.save()
+        self.assertIsNotNone(v.publish_date)
 
-    def testCategoryVideos(self):
-        self.failUnless(
-            self.category1.video_set.all().count() > 0,
-            "No embedded videos added to %s Category." % self.category1
-        )
-    
-    def testVideoTypes(self):
-        # Test the Base Video Model
-        self.failUnless(
-            Video.objects.all().count() == 2,
-            "Incorrect number of Videos",
-        )
+    def test_video_has_categories(self):
+        v = Video.objects.get(id=1)
+        self.assertEqual(2, v.categories.all().count())
 
-        # Test the Embedded Video Model
-        self.failUnless(
-            EmbedVideo.objects.all().count() == 1,
-            "Incorrect number of Embedded Videos",
-        )
+    def test_absolute_url(self):
+        v = Video.objects.get(id=1)
+        v.is_public = True
+        v.save()
 
-        # Test the Flash Video Model
-        self.failUnless(
-            FlashVideo.objects.all().count() == 1,
-            "Incorrect number of Flash Videos",
-        )
+        now = datetime.now()
+        expected_url = '/%s/%s/%s/%s/' % (
+            now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'),
+            'video-1')
 
-    def testVideoURL(self):
-        response = self.client.get(self.video1.get_absolute_url())
-        self.failUnlessEqual(response.status_code, 200)
+        self.assertEqual(expected_url, v.get_absolute_url())
 
-        response = self.client.get(self.video2.get_absolute_url())
-        self.failUnlessEqual(response.status_code, 200)

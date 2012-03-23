@@ -1,0 +1,41 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "tester",
+            "password": "",
+            "email": "test@example.com"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "videostream.videocategory",
+        "fields": {
+            "title": "Category 1",
+            "slug": "category-1",
+            "description": "Cateogory 1 Description"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "videostream.videocategory",
+        "fields": {
+            "title": "Cateogory 2",
+            "slug": "category-2",
+            "description": "Cateogory 2 Description"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "videostream.video",
+        "fields": {
+            "title": "Video 1",
+            "slug": "video-1",
+            "description": "Video 1 Description",
+            "tags": "tag1 tag2",
+            "categories": [1, 2],
+            "author": 1
+        }
+    }
+]
