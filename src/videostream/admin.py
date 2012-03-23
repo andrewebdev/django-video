@@ -48,49 +48,45 @@ unpublish_videos.short_description = "Unpublish selected Videos"
 class HTML5VideoInline(admin.TabularInline):
     model = HTML5Video
 
+
 ## ModelAdmin Classes
 class VideoCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ['title', 'slug']
 
-class VideoAdmin(admin.ModelAdmin):
-    """
-    Use this ModelAdmin class for other classes to extend
 
-    """
+class VideoAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)} 
     date_hierarchy = 'publish_date'
-    list_display = [
-        'title', 'slug', 'publish_date', 'is_public',
-        'allow_comments', 'author',
-    ]
-    list_filter = [
-        'created_date', 'publish_date', 'modified_date',
-        'is_public', 'allow_comments',
-    ]
+    list_display = ['title', 'slug', 'publish_date', 'is_public',
+        'allow_comments', 'author']
+    list_filter = ['created_date', 'publish_date', 'modified_date',
+        'is_public', 'allow_comments']
     search_fields = ['title', 'description', 'tags']
     fieldsets = (
         ('Video Details', {'fields': [
-            'title', 'slug', 'description', 'tags', 'is_public',
-            'allow_comments', 'publish_date', 'categories', 'author',
+            'title', 'slug', 'description', 'tags', 'categories', 'is_public',
+            'allow_comments', 'publish_date', 'author',
         ]}),
     )
     actions = [publish_videos, unpublish_videos,
                enable_video_comments, disable_video_comments]
+
 
 class FlashVideoAdmin(VideoAdmin):
     list_display = VideoAdmin.list_display + ['encode']
     list_filter = VideoAdmin.list_filter + ['encode']
     fieldsets = VideoAdmin.fieldsets + (
         ('Video Source', {'fields': [
-            'videoupload',
-            'flvfile',
+            'original_file',
+            'flv_file',
             'thumbnail', 
             'encode'
         ]}),
     )
     actions = VideoAdmin.actions + [mark_for_encoding,
                                     unmark_for_encoding, encode_videos]
+
 
 class EmbedVideoAdmin(VideoAdmin):
     list_display = VideoAdmin.list_display + ['video_url']
@@ -101,12 +97,12 @@ class EmbedVideoAdmin(VideoAdmin):
         ]}),
     )
 
+
 class BasicVideoAdmin(VideoAdmin):
-    list_display = VideoAdmin.list_display + ['video_type']
     inlines = [HTML5VideoInline]
+
 
 admin.site.register(VideoCategory, VideoCategoryAdmin)
 admin.site.register(FlashVideo, FlashVideoAdmin)
 admin.site.register(EmbedVideo, EmbedVideoAdmin)
 admin.site.register(BasicVideo, BasicVideoAdmin)
-# admin.site.register(Video, VideoAdmin)

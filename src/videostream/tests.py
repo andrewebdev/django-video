@@ -1,12 +1,15 @@
 from datetime import datetime
 
 from django.test import TestCase
-from django.test.client import Client
+from django.test.client import Client, RequestFactory
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
-from videostream.models import VideoCategory, Video
+from videostream.models import (VideoCategory, Video, BasicVideo, HTML5Video,
+    EmbedVideo, FlashVideo)
 
 
+## Models (including basic urls for permalink lookups)
 class VideoCategoryTestCase(TestCase):
 
     fixtures = ['videostream_test_fixtures.json']
@@ -37,7 +40,7 @@ class VideoTestCase(TestCase):
     fixtures = ['videostream_test_fixtures.json']
     urls = 'videostream.urls'
 
-    def test_model_exists(self):
+    def test_model(self):
         v = Video.objects.create(
             title='test video 1',
             slug='test-video-1',
@@ -73,3 +76,64 @@ class VideoTestCase(TestCase):
 
         self.assertEqual(expected_url, v.get_absolute_url())
 
+    def test_is_parent_class(self):
+        # Basically since this is a parent class all other videos that
+        # inherrits from this class can also be found through this model
+        # Since we have these other videos in the fixtures,
+        # this test should pass
+        self.assertEqual(3, Video.objects.all().count())
+
+
+class BasicVideoTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+
+    def test_model_exists(self):
+        v = BasicVideo()  # No need to test other fields since it inherrits
+
+    def test_has_html5videos(self):
+        v = BasicVideo.objects.get(id=1)
+        self.assertEqual(3, v.html5video_set.all().count())
+
+
+class HTML5VideoTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+
+    def test_model(self):
+        v = HTML5Video(video_type=1, video_file='test.ogg')
+
+    def test_html5videos_exists(self):
+        self.assertEqual(3, HTML5Video.objects.all().count())
+
+
+class EmbedVideoTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+
+    def test_model(self):
+        v = EmbedVideo.objects.create(
+            video_url='http://test.example.com/video/',
+            video_code='[video code]'
+        )
+
+
+class FlashVideoTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+
+    def test_model(self):
+        v = FlashVideo(
+            original_file='original.mp4',
+            flv_file='video.flv',
+            thumbnail='thumb.png',
+            encode=False
+        )
+
+    def test_get_player_size(self):
+        self.assertEqual('width: 320px; height: 240px;',
+            FlashVideo.objects.get(id=1).get_player_size())
+
+
+# No need to test the views really, since we are using django's
+# built in generic views

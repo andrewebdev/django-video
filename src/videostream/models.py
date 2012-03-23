@@ -93,8 +93,12 @@ class Video(models.Model):
 
 
 class BasicVideo(Video):
-    def video_type(self):
-        return self.html5video.get_video_type_display()
+    """
+    This is our basic HTML5 Video type. BasicVideo can have more than
+    one HTML5 Video as a 'video type'. This allows us to create different
+    video formats, one for each type format.
+    """
+    pass
 
 
 class HTML5Video(models.Model):
@@ -105,7 +109,7 @@ class HTML5Video(models.Model):
     VIDEO_TYPE = (
         (OGG, 'video/ogg'),
         (WEBM, 'video/webm'),
-        (MP4, 'vidoe/mp4'),
+        (MP4, 'video/mp4'),
         (FLASH, 'video/flv'),
     )
 
@@ -116,10 +120,9 @@ class HTML5Video(models.Model):
     )
     video_file = models.FileField(
         upload_to="videos/html5/",
-        null=True,
-        blank=True,
         help_text="The file you wish to upload. Make sure that it's the correct format.",
     )
+
     # Allow for multiple video types for a single video
     basic_video = models.ForeignKey(BasicVideo)
 
@@ -141,16 +144,15 @@ class FlashVideo(Video):
     """
     This model is what was once called "VideoStream". Since we want to support
     videos from other sources as well, this model was renamed to FlashVideo.
-
     """
-    videoupload = models.FileField(
+    original_file = models.FileField(
         upload_to="videos/flash/source/",
         null=True,
         blank=True,
         help_text="Make sure that the video you are uploading has a audo bitrate of at least 16. The encoding wont function on a lower audio bitrate."
     )
 
-    flvfile = models.FileField(
+    flv_file = models.FileField(
         upload_to="videos/flash/flv/",
         null=True,
         blank=True,
@@ -171,7 +173,6 @@ class FlashVideo(Video):
     )
 
     def get_player_size(self):
-        """ this method returns the styles for the player size
-        """
+        """ this method returns the styles for the player size """
         size = getattr(settings, 'VIDEOSTREAM_SIZE', '320x240').split('x')
         return "width: %spx; height: %spx;" % (size[0], size[1])
