@@ -8,4 +8,5 @@ setup(
     author="Andre Engelbrech",
     author_email="andre@teh-node.co.za",
     packages=['videostream'],
+    package_dir={'': 'src'}
 )
