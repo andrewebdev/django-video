@@ -80,7 +80,7 @@ class Video(models.Model):
     def get_absolute_url(self):
         return ('videostream_video_detail', (), { 
             'year': self.publish_date.strftime("%Y"),
-            'month': self.publish_date.strftime("%m"),
+            'month': self.publish_date.strftime("%b"),
             'day': self.publish_date.strftime("%d"), 
             'slug': self.slug 
         })
