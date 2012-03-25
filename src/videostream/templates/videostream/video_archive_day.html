@@ -1,9 +1,6 @@
-{% extends 'videostream/base.html' %}
 
-{% block main_content %}
     <h1>Videos for, {{ day|date:"d M Y" }}</h1>
 
-    {% if object_list %}
     <ul>
         {% for video in object_list %}
         <li>
@@ -21,5 +18,3 @@
         </li>
         {% endfor %}
     </ul>
-    {% endif %}
-{% endblock %}

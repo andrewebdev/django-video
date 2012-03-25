@@ -6,11 +6,11 @@ import os
 from django.conf import settings
 from videostream.models import FlashVideo
 
+
 def encode_video(flashvideo):
     """
     Encode a single Video where ``flashvideo`` is an instance of
     videostream.models.FlashVideo
-
     """
     MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
     VIDEOSTREAM_SIZE = getattr(settings, 'VIDEOSTREAM_SIZE', '320x240')
@@ -28,6 +28,7 @@ def encode_video(flashvideo):
     # Check if flv and thumbnail folder exists and create if not
     if not(os.access("%s/videos/flash/flv/" % MEDIA_ROOT, os.F_OK)):
         os.mkdir("%s/videos/flash/flv" % MEDIA_ROOT)
+
     if not(os.access("%s/videos/flash/thumbnails/" % MEDIA_ROOT, os.F_OK)):
         os.mkdir("%s/videos/flash/thumbnails" % MEDIA_ROOT)
 
@@ -42,13 +43,16 @@ def encode_video(flashvideo):
 
     # Lets do the conversion
     ffmpegresult = commands.getoutput(ffmpeg)
+    print 80*"~"
     print ffmpegresult
 
     if os.access(outfile, os.F_OK): # outfile exists
+
         # There was a error cause the outfile size is zero
         if (os.stat(outfile).st_size==0): 
             # We remove the file so that it does not cause confusion
             os.remove(outfile)
+
         else:
             # there does not seem to be errors, follow the rest of the procedures
             flvtoolresult = commands.getoutput(flvtool)
@@ -60,10 +64,16 @@ def encode_video(flashvideo):
             flashvideo.encode = False
             flashvideo.flvfile = flvurl
             flashvideo.thumbnail = thumburl
+
+    print 80*"~"
     flashvideo.save()
 
+
 def encode_video_set(queryset=None):
+
     if not queryset:
         queryset = FlashVideo.objects.filter(encode=True)
+
     for flashvideo in queryset:
         encode_video(flashvideo)
+

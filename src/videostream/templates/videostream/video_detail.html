@@ -1,13 +1,11 @@
-{% extends 'videostream/base.html' %}
+
 {% load videostream_tags %}
 
-{% block main_content %}
-{% if object %}
+{% if video %}
+
     <h1>{{ object.title }}</h1>
     <p>{{ object.description }}</p>
+
     {% render_video object %}
-{% else %}
-    <h2>Clip not found</h2>
-    <p>Sorry, but the clip you are looking for does not seem to exist</p>
+
 {% endif %}
-{% endblock %}

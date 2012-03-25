@@ -1,24 +1,20 @@
-{% extends 'videostream/base.html' %}
 
-{% block main_content %}
-    <h1>Video Archive</h1>
-    {% if latest %}
-        <ul>
-            {% for video in latest %}
-            <li>
-                <h2><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></h2>
-                <p>
-                    {% if video.author.get_full_name %}
-                        {{ video.author.get_full_name }}
-                    {% else %}
-                        {{ video.author }}
-                    {% endif %}
-                    - {{ video.publish_date|date:"d M Y" }}
-                </p>
-                <p>{{ video.description }}</p>
-                <p><a href="{{ video.get_absolute_url }}">View now...</a></p>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endblock %}
+    <h1>Latest Videos</h1>
+
+    <ul>
+        {% for video in latest %}
+        <li>
+            <h2><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></h2>
+            <p>
+                {% if video.author.get_full_name %}
+                    {{ video.author.get_full_name }}
+                {% else %}
+                    {{ video.author }}
+                {% endif %}
+                - {{ video.publish_date|date:"d M Y" }}
+            </p>
+            <p>{{ video.description }}</p>
+            <p><a href="{{ video.get_absolute_url }}">View now...</a></p>
+        </li>
+        {% endfor %}
+    </ul>

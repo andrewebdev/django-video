@@ -71,7 +71,7 @@ class VideoTestCase(TestCase):
 
         now = datetime.now()
         expected_url = '/%s/%s/%s/%s/' % (
-            now.strftime('%Y'), now.strftime('%m'), now.strftime('%d'),
+            now.strftime('%Y'), now.strftime('%b'), now.strftime('%d'),
             'video-1')
 
         self.assertEqual(expected_url, v.get_absolute_url())
@@ -135,5 +135,22 @@ class FlashVideoTestCase(TestCase):
             FlashVideo.objects.get(id=1).get_player_size())
 
 
-# No need to test the views really, since we are using django's
-# built in generic views
+class CategoryViewsTestCase(TestCase):
+
+    fixtures = ['videostream_test_fixtures.json']
+    urls = 'videostream.urls'
+
+    def test_category_list_view(self):
+        c = Client()
+        response = c.get('/categories/')
+
+        self.assertEqual(200, response.status_code)
+        self.assertIn('object_list', response.context)
+        self.assertEqual(2, response.context['object_list'].count())
+
+    def test_category_detail_view(self):
+        c = Client()
+        response = c.get('/category/category-1/')
+
+        self.assertEqual(200, response.status_code)
+        self.assertIn('category', response.context)
