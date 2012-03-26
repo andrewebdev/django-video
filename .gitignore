@@ -1,4 +1,15 @@
 *.pyc
+*.pyo
+*.egg-info
+*.db
 *~
 *.swp
-*.egg-info
+.*.cfg
+media
+bin
+develop-eggs
+dist
+downloads
+nginx
+eggs
+parts
