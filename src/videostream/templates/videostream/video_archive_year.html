@@ -2,19 +2,9 @@
     <h1>Videos published in, {{ year }}</h1>
 
     <ul>
-        {% for video in object_list %}
-        <li>
-            <h2><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></h2>
-            <p>
-                {% if video.author.get_full_name %}
-                    {{ video.author.get_full_name }}
-                {% else %}
-                    {{ video.author }}
-                {% endif %}
-                - {{ video.publish_date|date:"d M Y" }}
-            </p>
-            <p>{{ video.description }}</p>
-            <p><a href="{{ video.get_absolute_url }}">View now...</a></p>
-        </li>
+        {% for month in date_list %}
+        <li><a href="{% url videostream_video_month month|date:"Y" month|date:"b" %}">
+            {{ month|date:"F" }}</a></li>
         {% endfor %}
     </ul>
+
