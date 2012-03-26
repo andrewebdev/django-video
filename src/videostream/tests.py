@@ -28,7 +28,7 @@ class VideoCategoryTestCase(TestCase):
             VideoCategory._meta.verbose_name_plural)
 
     def test_categories_exist(self):
-        self.assertEquals(2, VideoCategory.objects.all().count())
+        self.assertEqual(2, VideoCategory.objects.all().count())
 
     def test_absolute_url(self):
         self.assertEqual('/category/category-1/',
@@ -135,15 +135,24 @@ class FlashVideoTestCase(TestCase):
             FlashVideo.objects.get(id=1).get_player_size())
 
 
-class CategoryViewsTestCase(TestCase):
+class VideoStreamViewsTestCase(TestCase):
 
     fixtures = ['videostream_test_fixtures.json']
     urls = 'videostream.urls'
 
+    def setUp(self):
+        now = datetime.now()
+        self.day = now.strftime('%d')
+        self.month = now.strftime('%b')
+        self.year = now.strftime('%Y')
+
+        for v in Video.objects.all():
+            v.is_public = True
+            v.save()
+
     def test_category_list_view(self):
         c = Client()
         response = c.get('/categories/')
-
         self.assertEqual(200, response.status_code)
         self.assertIn('object_list', response.context)
         self.assertEqual(2, response.context['object_list'].count())
@@ -151,6 +160,35 @@ class CategoryViewsTestCase(TestCase):
     def test_category_detail_view(self):
         c = Client()
         response = c.get('/category/category-1/')
-
         self.assertEqual(200, response.status_code)
         self.assertIn('category', response.context)
+
+    def test_archive_year_view(self):
+        c = Client()
+        response = c.get('/%s/' % self.year)
+        self.assertEqual(200, response.status_code)
+        self.assertIn('date_list', response.context)
+        self.assertEqual(1, len(response.context['date_list']))
+
+    def test_archive_month_view(self):
+        c = Client()
+        response = c.get('/%s/%s/' % (self.year, self.month))
+        self.assertEqual(200, response.status_code)
+        self.assertIn('object_list', response.context)
+        self.assertEqual(3, response.context['object_list'].count())
+
+    def test_archive_day_view(self):
+        c = Client()
+        response = c.get('/%s/%s/%s/' % (self.year, self.month, self.day))
+        self.assertEqual(200, response.status_code)
+        self.assertIn('object_list', response.context)
+        self.assertEqual(3, response.context['object_list'].count())
+
+    def test_video_detail_view(self):
+        c = Client()
+        response = c.get('/%s/%s/%s/%s/' % (
+            self.year, self.month, self.day, 'video-1'))
+        self.assertEqual(200, response.status_code)
+        self.assertIn('video', response.context)
+        self.assertEqual('Video 1', response.context['video'].title)
+
