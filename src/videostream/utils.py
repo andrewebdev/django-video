@@ -4,7 +4,13 @@ import commands
 import os
 
 from django.conf import settings
+
 from videostream.models import FlashVideo
+
+
+# This allows the developer to override the binary path for ffmpeg
+FFMPEG_BINARY_PATH = getattr(settings, 'FFMPEG_BINARY_PATH', 'ffmpeg')
+FLVTOOL_PATH = getattr(settings, 'FLVTOOL_PATH', 'flvtool2')
 
 
 def encode_video(flashvideo):
@@ -14,12 +20,14 @@ def encode_video(flashvideo):
     """
     MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
     VIDEOSTREAM_SIZE = getattr(settings, 'VIDEOSTREAM_SIZE', '320x240')
-    VIDEOSTREAM_THUMBNAIL_SIZE = getattr(settings, 'VIDEOSTREAM_THUMBNAIL_SIZE', '320x240')
+    VIDEOSTREAM_THUMBNAIL_SIZE = getattr(settings,
+        'VIDEOSTREAM_THUMBNAIL_SIZE', '320x240')
 
     flvfilename = "%s.flv" % flashvideo.slug
-    infile = "%s/%s" % (MEDIA_ROOT, flashvideo.videoupload)
+    infile = "%s/%s" % (MEDIA_ROOT, flashvideo.original_file)
     outfile = "%s/videos/flash/flv/%s" % (MEDIA_ROOT, flvfilename)
-    thumbnailfilename = "%s/videos/flash/thumbnails/%s.png" % (MEDIA_ROOT, flashvideo.slug)
+    thumbnailfilename = "%s/videos/flash/thumbnails/%s.png" % (
+        MEDIA_ROOT, flashvideo.slug)
 
     # Final Results
     flvurl = "videos/flash/flv/%s" % flvfilename
@@ -27,19 +35,21 @@ def encode_video(flashvideo):
 
     # Check if flv and thumbnail folder exists and create if not
     if not(os.access("%s/videos/flash/flv/" % MEDIA_ROOT, os.F_OK)):
-        os.mkdir("%s/videos/flash/flv" % MEDIA_ROOT)
+        os.makedirs("%s/videos/flash/flv" % MEDIA_ROOT)
 
     if not(os.access("%s/videos/flash/thumbnails/" % MEDIA_ROOT, os.F_OK)):
-        os.mkdir("%s/videos/flash/thumbnails" % MEDIA_ROOT)
+        os.makedirs("%s/videos/flash/thumbnails" % MEDIA_ROOT)
 
     # ffmpeg command to create flv video
-    ffmpeg = "ffmpeg -y -i %s -acodec libmp3lame -ar 22050 -ab 32000 -f flv -s %s %s" % (infile, VIDEOSTREAM_SIZE, outfile)
+    ffmpeg = "%s -y -i %s -acodec libmp3lame -ar 22050 -ab 32000 -f flv -s %s %s" % (
+        FFMPEG_BINARY_PATH, infile, VIDEOSTREAM_SIZE, outfile)
 
     # ffmpeg command to create the video thumbnail
-    getThumb = "ffmpeg -y -i %s -vframes 1 -ss 00:00:02 -an -vcodec png -f rawvideo -s %s %s" % (infile, VIDEOSTREAM_THUMBNAIL_SIZE, thumbnailfilename)
+    getThumb = "%s -y -i %s -vframes 1 -ss 00:00:02 -an -vcodec png -f rawvideo -s %s %s" % (
+        FFMPEG_BINARY_PATH, infile, VIDEOSTREAM_THUMBNAIL_SIZE, thumbnailfilename)
 
     # flvtool command to get the metadata
-    flvtool = "flvtool2 -U %s" % outfile
+    flvtool = "%s -U %s" % (FLVTOOL_PATH, outfile)
 
     # Lets do the conversion
     ffmpegresult = commands.getoutput(ffmpeg)
@@ -62,7 +72,7 @@ def encode_video(flashvideo):
             print thumbresult
 
             flashvideo.encode = False
-            flashvideo.flvfile = flvurl
+            flashvideo.flv_file = flvurl
             flashvideo.thumbnail = thumburl
 
     print 80*"~"

@@ -3,7 +3,9 @@ from django.contrib.contenttypes.models import ContentType
 
 from videostream.models import BasicVideo, EmbedVideo, FlashVideo
 
+
 register = template.Library()
+
 
 @register.inclusion_tag('videostream/include/render_video.html')
 def render_video(video_instance, width=320, height=240):
@@ -18,20 +20,22 @@ def render_video(video_instance, width=320, height=240):
         {% render_video video 640 480 %}
 
     """
-    #video_type = ContentType.objects.get_for_model(video_instance)
     try:
         if video_instance.basicvideo:
             video_type = 'basicvideo'
     except:
         pass
+
     try:
         if video_instance.embedvideo:
             video_type = 'embedvideo'
     except:
         pass
+
     try:
         if video_instance.flashvideo:
             video_type = 'flashvideo'
     except:
         pass
+
     return locals() 
