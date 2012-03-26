@@ -1,6 +1,4 @@
-{% comment %}
 {% load oembed_tags %}
-{% endcomment %}
 
 
 {% if video_type == 'basicvideo' %}
@@ -14,50 +12,45 @@
 
 
 {% if video_type == 'embedvideo' %}
+
     {% comment %}
-
-    If we have the video_code, then we use that to embed the video.
-    If not then we will use django-oembed to display the video directly
-    from the url.
-
-    Note however that the load tag and django-oembed tags have been commented out
-    in case you dont have django-oembed installed.
-
-    To use them, make sure you have django-oembed installed. And then customize
-    this template in your project templates folder, removing the comments around
-    the tags.
+    
+        If we have the video_code, then we use that to embed the video.
+        If not then we will use django-oembed to display the video directly
+        from the url.
+        Make sure you have django-oembed installed.
 
     {% endcomment %}
 
     {% if video_instance.embedvideo.video_code %}
         {{ video_instance.embedvideo.video_code|safe }}
     {% else %}
-        {% comment %}
         {% oembed %}{{ video_instance.embedvideo.video_url }}{% endoembed %}
-        {% endcomment %}
     {% endif %}
+
 {% endif %}
 
 
 {% if video_type == 'flashvideo' %}
+
     {% comment %}
+        To use the flashplayer option, you need to have a flashplayer installed
+        for your site. FlowPlayer is a good choice (http://flowplayer.org/).
 
-    To use the flashplayer option, you need to have a flashplayer installed
-    for your site. FlowPlayer is a good choice (http://flowplayer.org/).
+        If you have a flashplayer installed, you need to customize this
+        template and add the neccesarry HTML required for the flash
+        player you chose.
 
-    If you have a flashplayer installed, you need to customize this template and
-    add the neccesarry HTML required for the flash player you chose.
+        Here is a example, using flowplayer:
 
-    Here is a example, using flowplayer:
-
-    <a href="{{ video_instance.flashvideo.flv_file.url }}"
-        style="display: block; width={{ width }}; height={{ height }};"
-        id="player"> </a>
-
+        <a href="{{ video_instance.flashvideo.flv_file.url }}"
+            style="display: block; width={{ width }}; height={{ height }};"
+            id="player"> </a>
     {% endcomment %}
 
     <p>The player has been disabled in the demo app. See the template,
         <code>videostream/include/render_video.html</code>.
 
     <p>Just for reference, the flv file is: <code>{{ video_instance.flashvideo.flv_file.url }}</code>
+
 {% endif %}

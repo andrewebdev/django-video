@@ -13,7 +13,8 @@ Before you decide to use django-video on any commercial project, please be aware
 h2. Requirements
 
 * The full version of FFMPEG, if you want to use @python manage.py encode@, to encode a video clip from avi, mov or ogv to flv. Note that, some operating systems, like Ubuntu, by default does not have the full version of FFMPEG installed, so make sure to install the full version.
-* django-tagging is also optional if you want to use it's tagging features.
+* django-oembed
+* django-tagging (optional but recommended if you want to use it's tagging features.)
 
 h2. Installing
 
@@ -24,7 +25,7 @@ h2. Installing
 @'django/videostream/path/templates/'@
 # Override the default settings if you want to.
 See the settings below.
-# Add the urls to your project into your project urls.py
+# Add the urls
 @( r'^videos/', include( 'videostream.urls' ) ),@
 
 h2. Settings you may want to override.
