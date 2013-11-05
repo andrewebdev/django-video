@@ -12,4 +12,5 @@ dist
 downloads
 nginx
 eggs
-parts
+partsb
+build

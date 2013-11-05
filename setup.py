@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name="videostream",
@@ -7,6 +7,7 @@ setup(
     description="A simple video streaming application for django",
     author="Andre Engelbrech",
     author_email="andre@teh-node.co.za",
-    packages=['videostream'],
-    package_dir={'': 'src'}
+    package_dir={'': 'src'},
+    packages=find_packages('src'),
+    include_package_data=True,
 )

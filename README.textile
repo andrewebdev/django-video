@@ -19,10 +19,10 @@ h2. Requirements
 h2. Installing
 
 # Check that videostream folder is on your python path
-# Next, add the videostream app to your django INSTALLED_APPS
+# Next, add the videostream and oembed apps to your django INSTALLED_APPS
 @'videostream',@
-# If you want to use the default templates, you can add them to your TEMPLATE_DIRS
-@'django/videostream/path/templates/'@
+@'oembed,@
+# If you're using the app directories template loader (enabled by default) django should find the default templates on its own.
 # Override the default settings if you want to.
 See the settings below.
 # Add the urls
